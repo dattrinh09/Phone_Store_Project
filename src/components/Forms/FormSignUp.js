@@ -41,9 +41,10 @@ const FormSignUp = ({submitForm}) => {
 
     const [isCorrect, setIsCorrect] = useState(false)
 
+    const [createSuccess, setCreateSuccess] = useState(true)
+
     useEffect(() => {
         if(Object.keys(errors).length === 0 && isCorrect){
-            submitForm(true)
 
             let request = {
                 username: values.username,
@@ -53,12 +54,12 @@ const FormSignUp = ({submitForm}) => {
     
             axios.post('http://localhost:8000/sign-up', request)
             .then(resp => {
-              if(resp.data.status === 1){setIsCorrect(true)}
+              if(resp.data.status === 1){submitForm(true)}
               else{
-                  setErrors(errors.unsuccess = 'Create account unsuccess')
+                    setCreateSuccess(false)
                 }
             }).catch( err => {
-                setErrors(errors.unsuccess = 'Create account unsuccess')
+                setCreateSuccess(false)
             })
         }
     }, [errors]);
@@ -109,7 +110,9 @@ const FormSignUp = ({submitForm}) => {
                         />
                         {errors.password2 && <FormError>{errors.password2}</FormError>}
                     </FormItems>
-                    {errors.unsuccess && <FormError>{errors.unsuccess}</FormError>}
+                    <FormItems>
+                        {!createSuccess ? (<FormError>Create Account Unsuccessfull!</FormError>) : (null)}
+                    </FormItems>
                     <FormButton
                     onClick={handleFormSubmit}
                     >
