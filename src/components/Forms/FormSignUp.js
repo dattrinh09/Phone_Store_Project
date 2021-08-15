@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import validation from './validation'
+import axios from 'axios'
 import {
     FormContainer,
     FormWrapper,
@@ -43,6 +44,22 @@ const FormSignUp = ({submitForm}) => {
     useEffect(() => {
         if(Object.keys(errors).length === 0 && isCorrect){
             submitForm(true)
+
+            let request = {
+                username: values.username,
+                email: values.email,
+                password: values.password 
+            }
+    
+            axios.post('http://localhost:8000/sign-up', request)
+            .then(resp => {
+              if(resp.data.status === 1){setIsCorrect(true)}
+              else{
+                  setErrors(errors.unsuccess = 'Create account unsuccess')
+                }
+            }).catch( err => {
+                setErrors(errors.unsuccess = 'Create account unsuccess')
+            })
         }
     }, [errors]);
 
@@ -92,6 +109,7 @@ const FormSignUp = ({submitForm}) => {
                         />
                         {errors.password2 && <FormError>{errors.password2}</FormError>}
                     </FormItems>
+                    {errors.unsuccess && <FormError>{errors.unsuccess}</FormError>}
                     <FormButton
                     onClick={handleFormSubmit}
                     >

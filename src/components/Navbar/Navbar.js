@@ -44,7 +44,7 @@ const Navbar = () => {
                 <NavbarContainer>
                     <NavLogo to="/">
                         <NavIcon/>
-                            ULTRA
+                            PHONE STORE
                     </NavLogo>
                     <MobileIcon onClick={handleClick}>
                         {click ? <FaTimes/> : 
