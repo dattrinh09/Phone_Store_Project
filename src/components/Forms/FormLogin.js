@@ -10,9 +10,11 @@ import {
     FormButton,
     CloseButon
 } from './Form.Elements'
+import { useHistory } from 'react-router-dom';
 
-const FormLogin = ({loginSuccess}) => {
+const FormLogin = () => {
 
+    const history = useHistory()
 
     const handleFormSubmit = (e) =>{
         e.preventDefault();
@@ -23,7 +25,10 @@ const FormLogin = ({loginSuccess}) => {
 
         axios.post('http://localhost:8000/login', request)
         .then(resp => {
-          if(resp.data.status === 1){setIsCorrect(true)}
+          if(resp.data.status === 1){
+              localStorage.setItem("adminLogin", true)
+              history.replace("/")
+            }
           else{
               setErrors(false)
             }
@@ -44,15 +49,7 @@ const FormLogin = ({loginSuccess}) => {
         password: "",
     })
 
-    const [isCorrect, setIsCorrect] = useState(false)
-
     const [errors, setErrors] = useState(true)
-
-    useEffect(() => {
-        if(isCorrect){
-            loginSuccess(true)
-        }
-    }, [isCorrect]);
 
     return (
         <FormContainer>
@@ -93,3 +90,5 @@ const FormLogin = ({loginSuccess}) => {
 }
 
 export default FormLogin
+
+

@@ -131,3 +131,7 @@ export const NavBtnLink = styled(Link)`
     border: none;
     outline: none;
 `;
+
+export const UserIcon = styled.div`
+    font-size: 2rem;
+`

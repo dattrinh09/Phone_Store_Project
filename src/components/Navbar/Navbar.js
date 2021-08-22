@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaTimes, FaBars } from 'react-icons/fa'
 import { IconContext } from 'react-icons/lib'
 import { Button } from '../../globalStyles'
+import FormLogin from '../Forms/FormLogin'
 import { 
     Nav, 
     NavbarContainer, 
@@ -12,7 +13,7 @@ import {
     NavItem,
     NavLinks,
     NavBtnLink,
-    NavItemBtn 
+    NavItemBtn
 } from './Navbar.elements'
 
 
@@ -35,7 +36,21 @@ const Navbar = () => {
         showButton()
     }, [])
 
+    const [showAddProduct, setShowAddProduct] = useState(false)
+
     window.addEventListener("resize", showButton);
+
+    const signOut = () => {
+        localStorage.removeItem("adminLogin")
+    }
+
+    useEffect(() => {
+        if(localStorage.getItem("adminLogin")){
+            setShowAddProduct(true)
+        }else{
+            setShowAddProduct(false)
+        }
+    },[localStorage.getItem("adminLogin")])
 
     return (
         <>
@@ -60,13 +75,40 @@ const Navbar = () => {
                             <NavLinks to="/">
                                 Services
                             </NavLinks>
-                        </NavItem>                                       
+                        </NavItem>                                    
                         <NavItem>
-                            <NavLinks to="/products">
-                                Products
-                            </NavLinks>
-                        </NavItem>``
-                        <NavItemBtn>
+                            {showAddProduct ? (
+                                <NavLinks to="/add-products">
+                                    Add Products
+                                </NavLinks>
+                            ) : (
+                                <NavLinks to="/products">
+                                    Products
+                                </NavLinks>
+                            )}
+                        </NavItem>
+                        {showAddProduct ? (
+                            <>
+                            <NavItem>
+                                    <NavLinks>
+                                        <i class="far fa-user"></i>
+                                    </NavLinks>
+                            </NavItem>
+                            <NavItemBtn>
+                            {button ? (
+                                <NavBtnLink to="/">
+                                    <Button primary onClick={signOut}>SIGN OUT</Button>
+                                </NavBtnLink>
+                            ) : (
+                                <NavBtnLink to="/">
+                                    <Button fontBig primary onClick={signOut}>
+                                        SIGN OUT
+                                    </Button>
+                                </NavBtnLink>
+                            )}
+                        </NavItemBtn>
+                            </>
+                        ) : (<NavItemBtn>
                             {button ? (
                                 <NavBtnLink to="/sign-up">
                                     <Button primary>SIGN UP</Button>
@@ -79,6 +121,7 @@ const Navbar = () => {
                                 </NavBtnLink>
                             )}
                         </NavItemBtn>
+                        )}
                     </NavMenu>
                 </NavbarContainer>
             </Nav>

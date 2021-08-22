@@ -48,8 +48,7 @@ const FormSignUp = ({submitForm}) => {
 
             let request = {
                 username: values.username,
-                email: values.email,
-                password: values.password 
+                email: values.email 
             }
     
             axios.post('http://localhost:8000/sign-up', request)

@@ -1,4 +1,5 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import Footer from '../Footer/Footer';
 import { productData } from './Data'
 import {
@@ -16,14 +17,20 @@ import {
 
 const Products = () => {
 
-    const data = productData;
+    const [datas, setDatas] = useState([])
+
+    useEffect(() => {
+        axios.get('')
+        .then(res => setDatas(res.data)            
+        ).catch(error => console.log(error))
+    },[])
 
     return (
         <>
         <ProductsContainer>
             <ProductsHeading>Choose Your Favorite</ProductsHeading>
             <ProductsWrapper>
-                {data.map((product, index) => {
+                {datas.map((product, index) => {
                     return(
                         <ProductCart key={index}>
                             <ProductImg src={product.img}/>
@@ -31,7 +38,7 @@ const Products = () => {
                                 <ProductTitle>{product.name}</ProductTitle>
                                 <ProductDesc>{product.desc}</ProductDesc>
                                 <ProductPrice>{product.price}</ProductPrice>
-                                <ProductButton>{product.button}</ProductButton>
+                                <ProductButton>BUY NOW</ProductButton>
                             </ProductInfo>
                         </ProductCart>
                     )
