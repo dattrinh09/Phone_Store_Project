@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import Footer from '../Footer/Footer';
-import { productData } from './Data'
+import Footer from '../Footer/Footer'
 import {
     ProductsContainer,
     ProductsWrapper,
@@ -20,10 +19,12 @@ const Products = () => {
     const [datas, setDatas] = useState([])
 
     useEffect(() => {
-        axios.get('')
-        .then(res => setDatas(res.data)            
+        axios.get('http://localhost:8000/getAllProduct')
+        .then(res => setDatas(res.data.listProducts)            
         ).catch(error => console.log(error))
     },[])
+
+    console.log(datas)
 
     return (
         <>
@@ -33,10 +34,10 @@ const Products = () => {
                 {datas.map((product, index) => {
                     return(
                         <ProductCart key={index}>
-                            <ProductImg src={product.img}/>
+                            <ProductImg src={product.imageURL}/>
                             <ProductInfo>
-                                <ProductTitle>{product.name}</ProductTitle>
-                                <ProductDesc>{product.desc}</ProductDesc>
+                                <ProductTitle>{product.nameProduct}</ProductTitle>
+                                <ProductDesc>{product.description}</ProductDesc>
                                 <ProductPrice>{product.price}</ProductPrice>
                                 <ProductButton>BUY NOW</ProductButton>
                             </ProductInfo>

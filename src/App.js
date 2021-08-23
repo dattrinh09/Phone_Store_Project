@@ -6,6 +6,7 @@ import Home from './pages/HomePage/Home';
 import SignUp from './components/Forms/SignUp';
 import Products from './components/Products/Products';
 import FormLogin from './components/Forms/FormLogin';
+import FormAddProduct from './components/Forms/FormAddProduct';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/sign-up" component={SignUp}></Route>
         <Route path="/login" component={FormLogin}></Route>
         <Route path="/products" exact component={Products}></Route>
+        <Route path="/add-products" exact component={FormAddProduct}></Route>
       </Switch>
     </Router>
   );

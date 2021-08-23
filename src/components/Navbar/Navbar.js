@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { FaTimes, FaBars } from 'react-icons/fa'
 import { IconContext } from 'react-icons/lib'
 import { Button } from '../../globalStyles'
-import FormLogin from '../Forms/FormLogin'
 import { 
     Nav, 
     NavbarContainer, 
@@ -50,7 +49,7 @@ const Navbar = () => {
         }else{
             setShowAddProduct(false)
         }
-    },[localStorage.getItem("adminLogin")])
+    })
 
     return (
         <>
