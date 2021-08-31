@@ -7,6 +7,9 @@ import SignUp from './components/Forms/SignUp';
 import Products from './components/Products/Products';
 import FormLogin from './components/Forms/FormLogin';
 import FormAddProduct from './components/Forms/FormAddProduct';
+import Cart from './components/cart/Cart';
+import AdminProduct from './components/Products/AdminProduct';
+import ProductInfoSection from './components/InfoSection/ProductInfoSection';
 
 function App() {
   return (
@@ -17,8 +20,11 @@ function App() {
         <Route path="/" exact component={Home}></Route>
         <Route path="/sign-up" component={SignUp}></Route>
         <Route path="/login" component={FormLogin}></Route>
-        <Route path="/products" exact component={Products}></Route>
-        <Route path="/add-products" exact component={FormAddProduct}></Route>
+        <Route path="/products"  component={Products}></Route>
+        <Route path="/add-products"  component={FormAddProduct}></Route>
+        <Route path="/cart"  component={Cart}></Route>
+        <Route path="/admin-products"  component={AdminProduct}></Route>
+        <Route path="/show-data-info"  component={ProductInfoSection}></Route>
       </Switch>
     </Router>
   );

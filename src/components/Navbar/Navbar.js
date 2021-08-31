@@ -35,21 +35,27 @@ const Navbar = () => {
         showButton()
     }, [])
 
-    const [showAddProduct, setShowAddProduct] = useState(false)
-
     window.addEventListener("resize", showButton);
 
     const signOut = () => {
-        localStorage.removeItem("adminLogin")
+        localStorage.removeItem("isLogin")
+        localStorage.removeItem('isAdminLogin')
+        setIsLogin(false)
+        setIsAdminLogin(false)
     }
 
+    const [isLogin, setIsLogin] = useState(false)
+
+    const [isAdminLogin, setIsAdminLogin] = useState(false)
+
     useEffect(() => {
-        if(localStorage.getItem("adminLogin")){
-            setShowAddProduct(true)
-        }else{
-            setShowAddProduct(false)
+        if(localStorage.getItem('isLogin')) {
+            setIsLogin(true)
+            if(localStorage.getItem('isAdminLogin')){ 
+                setIsAdminLogin(true)
+            }
         }
-    })
+    }, [])
 
     return (
         <>
@@ -71,27 +77,32 @@ const Navbar = () => {
                             </NavLinks>
                         </NavItem>
                         <NavItem>
-                            <NavLinks to="/">
+                            <NavLinks to="/add-products">
                                 Services
                             </NavLinks>
-                        </NavItem>                                    
+                        </NavItem>                                   
                         <NavItem>
-                            {showAddProduct ? (
-                                <NavLinks to="/add-products">
-                                    Add Products
-                                </NavLinks>
-                            ) : (
-                                <NavLinks to="/products">
+                            {isAdminLogin ? (
+                                <NavLinks to="/admin-products">
                                     Products
                                 </NavLinks>
+                            ) : (
+                                <NavLinks to="/admin-products">
+                                    Products
+                                </NavLinks> 
                             )}
                         </NavItem>
-                        {showAddProduct ? (
+                        <NavItem>
+                            <NavLinks to="/cart">
+                                <i class="fas fa-cart-plus"></i>
+                            </NavLinks>
+                        </NavItem>
+                        {isLogin ? (
                             <>
                             <NavItem>
                                     <NavLinks>
                                         <i class="far fa-user"></i>
-                                    </NavLinks>
+                                    </NavLinks> 
                             </NavItem>
                             <NavItemBtn>
                             {button ? (

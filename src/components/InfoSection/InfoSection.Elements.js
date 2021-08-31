@@ -66,6 +66,14 @@ export const Subtitle = styled.p`
     color: ${({lightTextDesc}) => (lightTextDesc ? '#a9b3c1' : '#1c2237')};
 `;
 
+export const Price = styled.p`
+    max-width: 440px;
+    margin-bottom: 35px;
+    font-size: 38px;
+    line-height: 40px;
+    color: ${({lightTextDesc}) => (lightTextDesc ? '#a9b3c1' : '#1c2237')};
+`;
+
 export const ImgWrapper = styled.div`
     max-width: 555px;
     display: flex;

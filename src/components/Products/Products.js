@@ -1,5 +1,7 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { addToCart, datasSelector, getProductData, showProductData } from '../../store/appSlice';
 import Footer from '../Footer/Footer'
 import {
     ProductsContainer,
@@ -16,15 +18,23 @@ import {
 
 const Products = () => {
 
-    const [datas, setDatas] = useState([])
+    const datas = useSelector(datasSelector)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        axios.get('http://localhost:8000/getAllProduct')
-        .then(res => setDatas(res.data.listProducts)            
-        ).catch(error => console.log(error))
-    },[])
+        dispatch(getProductData())
+    }, [dispatch])
 
-    console.log(datas)
+    const history = useHistory()
+
+    const productPicked = id => {
+        dispatch(showProductData(id))
+        history.replace('/show-data-info')
+    }
+
+
+
 
     return (
         <>
@@ -39,7 +49,7 @@ const Products = () => {
                                 <ProductTitle>{product.nameProduct}</ProductTitle>
                                 <ProductDesc>{product.description}</ProductDesc>
                                 <ProductPrice>{product.price}</ProductPrice>
-                                <ProductButton>BUY NOW</ProductButton>
+                                <ProductButton onClick={productPicked.bind(this, product._id)}>BUY NOW</ProductButton>
                             </ProductInfo>
                         </ProductCart>
                     )

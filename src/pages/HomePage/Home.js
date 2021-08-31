@@ -1,19 +1,18 @@
 import React from 'react'
 import { Footer, InfoSection } from '../../components'
 import { 
-    homeObjFour, 
-    homeObjOne, 
-    homeObjThree, 
+    homeObjOne,  
     homeObjTwo 
 } from './Data'
 
 const Home = () => {
+
+    console.log(localStorage.getItem('product'))
+
     return (
         <>
             <InfoSection {...homeObjOne}/>
             <InfoSection {...homeObjTwo}/>
-            {/* <InfoSection {...homeObjThree}/>
-            <InfoSection {...homeObjFour}/> */}
             <Footer/>
         </>
     )

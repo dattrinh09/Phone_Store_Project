@@ -10,33 +10,48 @@ import {
     CloseButon,
     FormInputLabel
 } from './FormAdd.Elements'
+import { useDispatch } from 'react-redux'
+import { addToStore } from '../../store/appSlice'
 
 const FormAddProduct = () => {
 
+    const dispatch = useDispatch()
 
     const handleFormAdd = (e) =>{
         e.preventDefault()
-        if(values.name !== '' && values.description !== '' && values.imgURL != '' && values.price !== 0 && values.quantity !== 0)
+        if(values.name !== '' && values.description !== '' && values.imgURL !== '' && values.price !== 0 && values.quantity !== 0)
         {
-            let request = {
-                name: values.name,
+            // let request = {
+            //     productName: values.name,
+            //     description: values.description,
+            //     price: values.price,
+            //     imageURL: values.imgURL,
+            //     quantity: values.quantity
+            // }
+    
+            // axios.post('http://localhost:8000/admin/add', request)
+            // .then(resp => {
+            //   if(resp.data.status === 1){
+            //     setAddSuccess('ADD PRODUCT SUCCESSFULL')
+            //   }
+            //   else{
+            //         setAddSuccess('CAN NOT ADD THIS PRODUCT')
+            //     }
+            // }).catch( err => {
+            //     setAddSuccess('CAN NOT ADD THIS PRODUCT')
+            // })
+
+            const newProduct  = {
+                productName: values.name,
                 description: values.description,
                 price: values.price,
-                imgURL: values.imgURL,
+                imageURL: values.imgURL,
                 quantity: values.quantity
             }
-    
-            axios.post('http://localhost:8000/', request)
-            .then(resp => {
-              if(resp.data.status === 1){
-                setAddSuccess('ADD PRODUCT SUCCESSFULL')
-              }
-              else{
-                    setAddSuccess('CAN NOT ADD THIS PRODUCT')
-                }
-            }).catch( err => {
-                setAddSuccess('CAN NOT ADD THIS PRODUCT')
-            })
+
+            dispatch(addToStore(newProduct))
+
+            setAddSuccess('Successful')
         }else setAddSuccess('CAN NOT ADD THIS PRODUCT')
 
     }
@@ -106,7 +121,7 @@ const FormAddProduct = () => {
                         <FormInputLabel>Quantity</FormInputLabel>
                         <FormInput 
                         type="number"  
-                        name="quanity"
+                        name="quantity"
                         value={values.quantity}
                         onChange={handleChange}
                         />

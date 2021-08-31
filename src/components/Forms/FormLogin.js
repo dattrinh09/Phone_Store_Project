@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios';
 import {
     FormContainer,
@@ -11,6 +11,7 @@ import {
     CloseButon
 } from './Form.Elements'
 import { useHistory } from 'react-router-dom';
+
 
 const FormLogin = () => {
 
@@ -26,14 +27,18 @@ const FormLogin = () => {
         axios.post('http://localhost:8000/login', request)
         .then(resp => {
           if(resp.data.status === 1){
-              localStorage.setItem("adminLogin", true)
-              history.replace("/")
-            }
-          else{
+            history.replace("/")
+            
+            if(resp.data.role === 0) localStorage.setItem('isAdminLogin', true)
+
+            localStorage.setItem('isLogin', true)
+
+            }else{
               setErrors(false)
             }
         }).catch( err => {
             setErrors(false)
+            console.log(err)
         })
     }
 
