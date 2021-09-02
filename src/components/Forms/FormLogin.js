@@ -11,6 +11,7 @@ import {
     CloseButon
 } from './Form.Elements'
 import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 
 const FormLogin = () => {
@@ -24,14 +25,17 @@ const FormLogin = () => {
             password: values.password 
         }
 
-        axios.post('http://localhost:8000/login', request)
+        axios.post('http://localhost:8000/login', request, {withCredentials: true})
         .then(resp => {
           if(resp.data.status === 1){
-            history.replace("/")
-            
-            if(resp.data.role === 0) localStorage.setItem('isAdminLogin', true)
 
-            localStorage.setItem('isLogin', true)
+                console.log(resp.data)
+
+                history.replace("/")
+            
+                if(resp.data.role === 0) {
+                Cookies.set("isAdminLogin","true")
+                }
 
             }else{
               setErrors(false)

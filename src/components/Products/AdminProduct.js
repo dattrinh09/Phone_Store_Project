@@ -1,8 +1,6 @@
-import React from 'react'
-import { useState } from 'react'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addToStore, datasSelector, deleteInStore, getProductData } from '../../store/appSlice'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { 
     ProductContainer, 
     ProductImg, 
@@ -15,12 +13,21 @@ import {
     DeleteButton,
     ProductButton,
     EditButton,
-    ProductInput
+    ProductInput,
+    AddProductBtn,
+    AddProductIcon
 } from './AdminProduct.Elements'
 
 function AdminProduct() {
 
-    const datas = useSelector(datasSelector)
+    const [datas, setDatas] = useState([])
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/getAllProducts'
+        ).then(res => {
+            setDatas(res.data.listProducts)
+        }).catch(err => console.log(err))
+    }, [])
     
     const [values, setValues] = useState({
         name: '',
@@ -29,11 +36,18 @@ function AdminProduct() {
         quantity: ''
     })
 
-    const dispatch = useDispatch()
+    const [deleteId, setDeleteId] = useState(
+        null
+    ) 
 
     useEffect(() => {
-        dispatch(getProductData())
-    }, [dispatch])
+        if(deleteId){
+            axios.post('http://localhost:8000/admin/delete', {deleteId:deleteId})
+            .then(res => {
+                console.log(res)
+            }).catch(err => console.log(err))
+        }
+    }, [deleteId])
 
     const [isPick, setIsPick] = useState(0)
 
@@ -58,14 +72,10 @@ function AdminProduct() {
         })
     }
 
-    const onDelete = id => {
-        dispatch(deleteInStore(id))
-        console.log(id)
-    }
 
     const saveToStore = product => {
         const newProduct  = {
-            _id: product._id,
+            productId: product._id,
             nameProduct: '',
             description: '',
             price: '',
@@ -84,12 +94,10 @@ function AdminProduct() {
 
         if(values.quantity === '') newProduct.quantity = product.quantity
         else newProduct.quantity = values.quantity
-        
-        console.log(newProduct)
 
-        dispatch(deleteInStore(newProduct._id))
-
-        dispatch(addToStore(newProduct))
+        axios.post('http://localhost:8000/admin/update', newProduct
+        ).then(res => console.log(res)
+        ).catch(err => console.log(err))
 
         setIsPick(-100)
         setValues({
@@ -100,8 +108,20 @@ function AdminProduct() {
         })
     }
 
+    const history = useHistory()
+
+    const onAdd = () => {
+        history.replace("/add-products")
+    }
+
     return (
         <ProductsContainer>
+            <AddProductBtn onClick={onAdd}>
+                <AddProductIcon>
+                <i class="fas fa-plus-circle"></i>
+                </AddProductIcon>
+                Add Product
+            </AddProductBtn>
             {datas.map((product, index) => {
                 return(
                     <ProductContainer key={index}>                            
@@ -146,7 +166,7 @@ function AdminProduct() {
                             </ProductInfo>
                         )}
                         <ProductButton>
-                            <DeleteButton onClick={onDelete.bind(this, product._id)}>Delete</DeleteButton>
+                            <DeleteButton onClick={() => setDeleteId(product._id)}>Delete</DeleteButton>
                             {product._id !== isPick ? (
                                 <EditButton onClick={onEditClick.bind(this, product._id)}>Edit</EditButton>
                             ):(

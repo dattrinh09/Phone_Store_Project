@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { addToCart, datasSelector, getProductData, showProductData } from '../../store/appSlice';
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import Footer from '../Footer/Footer'
+import axios from 'axios'
 import {
     ProductsContainer,
     ProductsWrapper,
@@ -15,26 +14,26 @@ import {
     ProductButton,
     ProductInfo
 } from './Products.Elements'
+import Cookies from 'js-cookie'
 
 const Products = () => {
 
-    const datas = useSelector(datasSelector)
-
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(getProductData())
-    }, [dispatch])
-
     const history = useHistory()
 
-    const productPicked = id => {
-        dispatch(showProductData(id))
-        history.replace('/show-data-info')
+    const [datas, setDatas] = useState([])
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/getAllProducts', {withCredentials:true}
+        ).then(res => {
+            setDatas(res.data.listProducts)
+        }).catch(err => console.log(err))
+    }, [])
+
+    const showProduct = id => {
+        Cookies.remove("showId")
+        Cookies.set("showId", id)
+        history.replace("/show-data-info")
     }
-
-
-
 
     return (
         <>
@@ -49,7 +48,7 @@ const Products = () => {
                                 <ProductTitle>{product.nameProduct}</ProductTitle>
                                 <ProductDesc>{product.description}</ProductDesc>
                                 <ProductPrice>{product.price}</ProductPrice>
-                                <ProductButton onClick={productPicked.bind(this, product._id)}>BUY NOW</ProductButton>
+                                <ProductButton onClick={showProduct.bind(this, product._id)}>BUY NOW</ProductButton>
                             </ProductInfo>
                         </ProductCart>
                     )

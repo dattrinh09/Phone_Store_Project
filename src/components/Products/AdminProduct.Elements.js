@@ -111,4 +111,24 @@ export const ProductInput = styled.input`
     }
 `
 
+export const AddProductBtn = styled.button`
+    background: #4b59f7;
+    padding: 15px 40px;
+    font-size: 24px;
+    font-weight: 1000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    display: flex;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    cursor: pointer;
+`
+
+export const AddProductIcon = styled.div`
+    color: #fff;
+    margin-right: 10px;
+`
+
 

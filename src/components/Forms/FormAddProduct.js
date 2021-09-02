@@ -10,36 +10,13 @@ import {
     CloseButon,
     FormInputLabel
 } from './FormAdd.Elements'
-import { useDispatch } from 'react-redux'
-import { addToStore } from '../../store/appSlice'
 
 const FormAddProduct = () => {
-
-    const dispatch = useDispatch()
 
     const handleFormAdd = (e) =>{
         e.preventDefault()
         if(values.name !== '' && values.description !== '' && values.imgURL !== '' && values.price !== 0 && values.quantity !== 0)
         {
-            // let request = {
-            //     productName: values.name,
-            //     description: values.description,
-            //     price: values.price,
-            //     imageURL: values.imgURL,
-            //     quantity: values.quantity
-            // }
-    
-            // axios.post('http://localhost:8000/admin/add', request)
-            // .then(resp => {
-            //   if(resp.data.status === 1){
-            //     setAddSuccess('ADD PRODUCT SUCCESSFULL')
-            //   }
-            //   else{
-            //         setAddSuccess('CAN NOT ADD THIS PRODUCT')
-            //     }
-            // }).catch( err => {
-            //     setAddSuccess('CAN NOT ADD THIS PRODUCT')
-            // })
 
             const newProduct  = {
                 productName: values.name,
@@ -49,9 +26,22 @@ const FormAddProduct = () => {
                 quantity: values.quantity
             }
 
-            dispatch(addToStore(newProduct))
-
-            setAddSuccess('Successful')
+            axios.post('http://localhost:8000/admin/add', newProduct, {withCredentials: true})
+            .then(res => {
+                if(res.data.status === 1) {
+                    setAddSuccess('Successful')
+                    setValues({
+                        name: '',
+                        description: '',
+                        price: 0,
+                        imgURL: '',
+                        quantity: 0
+                    })
+            }
+                else setAddSuccess('CAN NOT ADD THIS PRODUCT')
+            }).catch(err => {
+                console.log(err)
+            })
         }else setAddSuccess('CAN NOT ADD THIS PRODUCT')
 
     }

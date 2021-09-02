@@ -1,47 +1,74 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addProductToCart, productShowSelector } from '../../store/appSlice'
-import InfoSection from './InfoSection'
+import Cookies from 'js-cookie'
+import React, { useState, useEffect } from 'react'
+import { Button, Container } from '../../globalStyles'
+import axios from 'axios'
+import { 
+    InfoSec,
+    InfoRow,
+    InfoColumn,
+    TextWrapper,
+    Heading,
+    Subtitle,
+    ImgWrapper,
+    Img,
+    Price
+} from './InfoSection.Elements'
 
 function ProductInfoSection() {
 
-    const showData = useSelector(productShowSelector)
+    const [datas, setDatas] = useState([])
 
-    const showSingleData = {
-        id: '',
-        primary: false,
-        lightBg: true, 
-        imgStart: 'start', 
-        lightTopLine: false, 
-        lightTextDesc: false, 
-        buttonLabel: 'Add To Cart',
-        description: '',
-        headLine: '',
-        lightText: false,
-        topLine: '',
-        img: '',
-        alt: 'Image',
-        start: '',
-        price: '',
-    }
+    useEffect(() => {
+        axios.get('http://localhost:8000/getAllProducts'
+        ).then(res => {
+            setDatas(res.data.listProducts)
+        }).catch(err => console.log(err))
+    }, [])
 
-    showData.map(data => {
-        showSingleData.id = data._id
-        showSingleData.headLine = data.nameProduct
-        showSingleData.description = data.description
-        showSingleData.img = data.imageURL
-        showSingleData.price = data.price
-    })
+    const showId = Cookies.get("showId")
 
-    const disptach = useDispatch()
-
-    const addToCart = id => {
-        disptach(addProductToCart(id))
+    const onAddToCart = () => {
+        axios.post('http://localhost:8000/users/addToCart', {productId:showId}, {withCredentials: true})
+        .then(res => {
+            console.log(res)
+        }).catch(err => console.log(err))
     }
 
     return (
         <div>
-            <InfoSection {...showSingleData} addToCart={addToCart.bind(this, showSingleData.id)}/>
+            {datas.map((product) => {
+                if(product._id === showId){
+                    return (
+                        <InfoSec lightBg={true} key={product._id} paddingInfo>
+                        <Container>
+                            <InfoRow >
+                                <InfoColumn>
+                                    <ImgWrapper start>
+                                        <Img src={product.imageURL} alt="Image"/>
+                                    </ImgWrapper>
+                                </InfoColumn>
+                                <InfoColumn>
+                                    <TextWrapper>
+                                        <Heading lightText={false}>
+                                            {product.nameProduct}
+                                        </Heading>
+                                        <Subtitle lightTextDesc={false}>
+                                            {product.description}
+                                        </Subtitle>
+                                        <Price lightTextDesc={false}>
+                                            {product.price}
+                                        </Price>
+                                        <Button big fontBig primary={false} onClick={onAddToCart}>
+                                            Add To Cart
+                                        </Button>
+                                    </TextWrapper>
+                                </InfoColumn>
+                            </InfoRow>
+                        </Container>
+                    </InfoSec>
+                    )
+                }
+            })}
         </div>
     )
 }

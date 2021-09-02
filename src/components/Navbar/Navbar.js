@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaTimes, FaBars } from 'react-icons/fa'
 import { IconContext } from 'react-icons/lib'
 import { Button } from '../../globalStyles'
+import Cookies from 'js-cookie'
 import { 
     Nav, 
     NavbarContainer, 
@@ -38,24 +39,9 @@ const Navbar = () => {
     window.addEventListener("resize", showButton);
 
     const signOut = () => {
-        localStorage.removeItem("isLogin")
-        localStorage.removeItem('isAdminLogin')
-        setIsLogin(false)
-        setIsAdminLogin(false)
+        Cookies.remove("isAdminLogin")
+        Cookies.remove("userId")
     }
-
-    const [isLogin, setIsLogin] = useState(false)
-
-    const [isAdminLogin, setIsAdminLogin] = useState(false)
-
-    useEffect(() => {
-        if(localStorage.getItem('isLogin')) {
-            setIsLogin(true)
-            if(localStorage.getItem('isAdminLogin')){ 
-                setIsAdminLogin(true)
-            }
-        }
-    }, [])
 
     return (
         <>
@@ -82,23 +68,28 @@ const Navbar = () => {
                             </NavLinks>
                         </NavItem>                                   
                         <NavItem>
-                            {isAdminLogin ? (
+                            {Cookies.get("isAdminLogin") ? (
                                 <NavLinks to="/admin-products">
                                     Products
                                 </NavLinks>
                             ) : (
-                                <NavLinks to="/admin-products">
+                                <NavLinks to="/products">
                                     Products
                                 </NavLinks> 
                             )}
                         </NavItem>
-                        <NavItem>
-                            <NavLinks to="/cart">
-                                <i class="fas fa-cart-plus"></i>
-                            </NavLinks>
-                        </NavItem>
-                        {isLogin ? (
+
+                        {Cookies.get('userId') ? (
                             <>
+                            {!Cookies.get("isAdminLogin") ? (
+                                <NavItem>
+                                    <NavLinks to="/cart">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </NavLinks>
+                                </NavItem>
+                            ) : (
+                                <></>
+                            )}
                             <NavItem>
                                     <NavLinks>
                                         <i class="far fa-user"></i>

@@ -12,14 +12,16 @@ export const getProductData = createAsyncThunk(
 //Add Product To Store
 export const addToStore = createAsyncThunk(
     'apps/addToStore', async product =>{
-        await axios.post('http://localhost:8000/admin/add',{withCredentials: true},product )
+        await axios.post('http://localhost:8000/admin/add',product, {withCredentials: true})
 })
 
-//Delete Data In Store
+// Delete Data In Store
 export const deleteInStore = createAsyncThunk(
     'apps/deleteInStore', async id =>{
         console.log(id)
-        await axios.delete('http://localhost:8000/admin/delete', id)
+        await axios.delete('http://localhost:8000/admin/delete', id, {withCredentials: true}
+        ).then(res => console.log(res)
+        ).catch(err => console.log(err))
     }
 )
 
