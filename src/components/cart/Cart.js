@@ -15,19 +15,29 @@ function Cart() {
         ).catch(err => console.log(err))
     }, [])
 
+    cartDatas.map((product,index) => {
+        return (
+            <div key={index}>
+                <h1>{product.nameProduct}</h1>
+                <img src={product.imageURL}></img>
+            </div>
+        )
+    })
+
     return (
         <div>
-            {cartDatas.length === 0 ? (
-                <CartEmpty>Cart is empty</CartEmpty>
-            ):(
+            {cartDatas.length !== 0 ? (
                 cartDatas.map((product,index) => {
                     return (
                         <div key={index}>
                             <h1>{product.nameProduct}</h1>
+                            <h1>{product.price}</h1>
                             <img src={product.imageURL}></img>
                         </div>
                     )
                 })
+            ):(
+                <CartEmpty>Cart is empty</CartEmpty>
             )}
         </div>
     )
